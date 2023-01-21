@@ -56,7 +56,7 @@ spi_t *max_spi_init(char *spi_dev, char spiMode, int freq)
 
     CLOG("MAX31865 Initilization: SPI Dev: %s, mode: %d, freq: %d\n", spi_dev, spiMode, freq);
     if (spi_open(spi, spi_dev, spiMode, freq))
-        CLOG("Print error Code Here\r\n");
+        ILOG("Print error Code Here\r\n");
     
     Max_single_byte_write(spi, WRITE_CONFIGURATION_ADDR, 0xD0); //VBIAS=1, Conversion mode =1(Auto), 0=Shot Conversion(Auto-Clear), 1=3-Wire, Fault Detection=00, Fault Status = Clear, 60Hz
     usleep(100000);
@@ -91,7 +91,7 @@ uint8_t Max_single_byte_read(spi_t *spi, uint8_t address, uint8_t *pRxData)
     CLOG("tx_buff[0] = %x",tx_buff[0]);
 
     if(spi_transfer(spi,tx_buff,pRxData,NUMBER_OF_BYTES)){
-    CLOG("Error in SPI Transfer !: %s\r\n",spi->error.errmsg);
+    WLOG("Error in SPI Transfer !: %s\r\n",spi->error.errmsg);
     return spi->error.c_errno;
     }
 
@@ -120,7 +120,7 @@ uint8_t Max_single_byte_write(spi_t *spi, uint8_t address, uint8_t data)
     CLOG("tx_buff[1] = %x",tx_buff[1]);
 
     if(spi_transfer(spi,tx_buff,rx_buff,NUMBER_OF_BYTES)){
-    CLOG("Error in SPI Transfer !: %s\r\n",spi->error.errmsg);
+    WLOG("Error in SPI Transfer !: %s\r\n",spi->error.errmsg);
     return spi->error.c_errno;
     }
 
@@ -149,7 +149,7 @@ uint8_t Max_mutiple_write_byte(spi_t *spi, uint8_t address, uint8_t *pWriteData,
     CLOG("tx_buff[0], Address = %x",tx_buff[0]);
 
     if(spi_transfer(spi, tx_buff, rx_buff, length+1)){
-    CLOG("Error in SPI Transfer !: %s\r\n",spi->error.errmsg);
+    WLOG("Error in SPI Transfer !: %s\r\n",spi->error.errmsg);
     return spi->error.c_errno;
     }
     
@@ -172,7 +172,7 @@ uint8_t Max_mutiple_read_byte(spi_t *spi, uint8_t address, uint8_t *pData, uint8
     CLOG("[MAX] SPI Mutiple Transfer = %x",tx_buff);
     
     if(spi_transfer(spi, tx_buff, pData, length+1)){
-    CLOG("Error in SPI Transfer !: %s\r\n",spi->error.errmsg);
+    WLOG("Error in SPI Transfer !: %s\r\n",spi->error.errmsg);
     return spi->error.c_errno;
     }
 
